@@ -17,7 +17,7 @@ public class FileManagerTest {
     }
 
     @Test
-    public void tesCountFilesWhenDirectoryDoesNotExist(){
+    public void tesCountFilesWhenDirectoryDoesNotExist() {
         assertThrows(FileNotFoundException.class, () -> {
             FileManager.countFiles(".//Test");
         });
@@ -36,7 +36,7 @@ public class FileManagerTest {
     }
 
     @Test
-    public void tesCountDirsWhenDirectoryDoesNotExist(){
+    public void tesCountDirsWhenDirectoryDoesNotExist() {
         assertThrows(FileNotFoundException.class, () -> {
             FileManager.countDirs(".//Test");
         });

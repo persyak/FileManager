@@ -55,7 +55,7 @@ public class FileManager {
         } else if (copyFrom.isFile()) {
             copyFileToDirectory(from, to);
         } else if (copyFrom.isDirectory()) {
-            copyDirectory(from, to);
+            copyDirectory(copyFrom, copyTo);
         }
     }
 
@@ -78,10 +78,7 @@ public class FileManager {
     }
 
     private static boolean checkIfFolderIsEmpty(File[] folder) {
-        if (folder.length < 1) {
-            return true;
-        }
-        return false;
+        return folder.length < 1;
     }
 
     private static void copyFileToDirectory(String from, String to) throws IOException {
@@ -107,18 +104,17 @@ public class FileManager {
     }
 
 
-    private static void copyDirectory(String from, String to) throws IOException {
-        File copyFrom = new File(from);
-        File copyTo = new File(to);
+    private static void copyDirectory(File copyFrom, File copyTo) throws IOException {
+//        File copyFrom = new File(from);
+//        File copyTo = new File(to);
         if (!copyTo.exists()) {
             copyTo.mkdirs();
         }
-
         for (String element : copyFrom.list()) {
             File newFileFrom = new File(copyFrom, element);
             File newFileTo = new File(copyTo, element);
             if (newFileFrom.isDirectory()) {
-                copyDirectory(newFileFrom.getAbsolutePath(), newFileTo.getAbsolutePath());
+                copyDirectory(newFileFrom, newFileTo);
             } else {
                 copyFileToFile(newFileFrom, newFileTo);
             }

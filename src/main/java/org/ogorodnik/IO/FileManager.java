@@ -49,10 +49,11 @@ public class FileManager {
         File copyFrom = new File(from);
         File copyTo = new File(to);
         checkIfFileOrDirectoryExists(copyFrom);
-        checkIfFileOrDirectoryExists(copyTo);
-        if (!copyTo.isDirectory()) {
-            throw new IllegalPathStateException("Destination path is not a directory");
-        } else if (copyFrom.isFile()) {
+        //checkIfFileOrDirectoryExists(copyTo);
+//        if (!copyTo.isDirectory()) {
+//            throw new IllegalPathStateException("Destination path is not a directory");
+        //} else
+        if (copyFrom.isFile()) {
             copyFileToDirectory(from, to);
         } else if (copyFrom.isDirectory()) {
             copyDirectory(copyFrom, copyTo);
@@ -84,29 +85,31 @@ public class FileManager {
     private static void copyFileToDirectory(String from, String to) throws IOException {
         File copyFrom = new File(from);
         File copyTo = new File(to);
+        if (!copyTo.exists()) {
+            copyTo.mkdirs();
+        }
         String destinationFileName = copyFrom.getName();
         File copyToFile = new File(copyTo, destinationFileName);
         copyFileToFile(copyFrom, copyToFile);
     }
 
     private static void copyFileToFile(File from, File to) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(from);
+        try(FileInputStream fileInputStream = new FileInputStream(from);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-        FileOutputStream fileOutputStream = new FileOutputStream(to);
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-        byte[] buffer = new byte[32 * 1024];
-        int length;
-        while ((length = bufferedInputStream.read(buffer)) > 0) {
-            bufferedOutputStream.write(buffer, 0, length);
+            FileOutputStream fileOutputStream = new FileOutputStream(to);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)) {
+            byte[] buffer = new byte[32 * 1024];
+            int length;
+            while ((length = bufferedInputStream.read(buffer)) > 0) {
+                bufferedOutputStream.write(buffer, 0, length);
+            }
+        } catch (IOException exception){
+            throw new IOException("Exception while copying the file");
         }
-        bufferedInputStream.close();
-        bufferedOutputStream.close();
     }
 
 
     private static void copyDirectory(File copyFrom, File copyTo) throws IOException {
-//        File copyFrom = new File(from);
-//        File copyTo = new File(to);
         if (!copyTo.exists()) {
             copyTo.mkdirs();
         }
@@ -121,13 +124,13 @@ public class FileManager {
         }
     }
 
-    private static boolean delete(File itemToDelete) {
+    private static void delete(File itemToDelete) {
         File[] content = itemToDelete.listFiles();
         if (content != null) {
             for (File file : content) {
                 delete(file);
             }
         }
-        return itemToDelete.delete();
+        itemToDelete.delete();
     }
 }

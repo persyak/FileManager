@@ -1,8 +1,7 @@
 package org.ogorodnik.IO;
 
-import java.awt.geom.IllegalPathStateException;
 import java.io.*;
-import java.nio.file.DirectoryStream;
+import java.nio.file.AccessDeniedException;
 
 public class FileManager {
 
@@ -49,10 +48,6 @@ public class FileManager {
         File copyFrom = new File(from);
         File copyTo = new File(to);
         checkIfFileOrDirectoryExists(copyFrom);
-        //checkIfFileOrDirectoryExists(copyTo);
-//        if (!copyTo.isDirectory()) {
-//            throw new IllegalPathStateException("Destination path is not a directory");
-        //} else
         if (copyFrom.isFile()) {
             copyFileToDirectory(from, to);
         } else if (copyFrom.isDirectory()) {
@@ -94,6 +89,9 @@ public class FileManager {
     }
 
     private static void copyFileToFile(File from, File to) throws IOException {
+        if(!from.canRead()){
+            throw new AccessDeniedException("Please check " +  from + " file, it can't be read");
+        }
         try(BufferedInputStream bufferedInputStream
                 = new BufferedInputStream(new FileInputStream(from));
             BufferedOutputStream bufferedOutputStream

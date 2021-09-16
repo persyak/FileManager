@@ -94,11 +94,11 @@ public class FileManager {
     }
 
     private static void copyFileToFile(File from, File to) throws IOException {
-        try(FileInputStream fileInputStream = new FileInputStream(from);
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-            FileOutputStream fileOutputStream = new FileOutputStream(to);
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream)) {
-            byte[] buffer = new byte[32 * 1024];
+        try(BufferedInputStream bufferedInputStream
+                = new BufferedInputStream(new FileInputStream(from));
+            BufferedOutputStream bufferedOutputStream
+                    = new BufferedOutputStream(new FileOutputStream(to))) {
+            byte[] buffer = new byte[1024];
             int length;
             while ((length = bufferedInputStream.read(buffer)) > 0) {
                 bufferedOutputStream.write(buffer, 0, length);

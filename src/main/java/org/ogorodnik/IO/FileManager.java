@@ -6,30 +6,28 @@ import java.nio.file.AccessDeniedException;
 public class FileManager {
 
     public static int countFiles(String path) throws FileNotFoundException {
-        File directory = new File(path);
-        checkIfFileOrDirectoryExists(directory);
-        checkifSourceIsDirectory(directory);
+        File[] array = listDirectory(path);
         int filecount = 0;
-        File[] array = directory.listFiles();
-        for (File element : array) {
-            if (!element.isHidden()) {
-                if (element.isFile()) {
-                    filecount++;
-                } else {
-                    String innerPath = element.getPath();
-                    filecount += countFiles(innerPath);
+        if (checkIfFolderIsEmpty(array)) {
+            return 0;
+        } else {
+            for (File element : array) {
+                if (!element.isHidden()) {
+                    if (element.isFile()) {
+                        filecount++;
+                    } else {
+                        String innerPath = element.getPath();
+                        filecount += countFiles(innerPath);
+                    }
                 }
             }
+            return filecount;
         }
-        return filecount;
     }
 
     public static int countDirs(String path) throws FileNotFoundException {
-        File directory = new File(path);
-        checkIfFileOrDirectoryExists(directory);
-        checkifSourceIsDirectory(directory);
+        File[] array = listDirectory(path);
         int dirCount = 0;
-        File[] array = directory.listFiles();
         if (checkIfFolderIsEmpty(array)) {
             return 0;
         } else {
@@ -130,5 +128,12 @@ public class FileManager {
             }
         }
         itemToDelete.delete();
+    }
+
+    private static File[] listDirectory(String path) throws FileNotFoundException {
+        File directory = new File(path);
+        checkIfFileOrDirectoryExists(directory);
+        checkifSourceIsDirectory(directory);
+        return directory.listFiles();
     }
 }

@@ -89,19 +89,19 @@ public class FileManager {
     }
 
     private static void copyFileToFile(File from, File to) throws IOException {
-        if(!from.canRead()){
-            throw new AccessDeniedException("Please check " +  from + " file, it can't be read");
+        if (!from.canRead()) {
+            throw new AccessDeniedException("Please check " + from + " file, it can't be read");
         }
-        try(BufferedInputStream bufferedInputStream
-                = new BufferedInputStream(new FileInputStream(from));
-            BufferedOutputStream bufferedOutputStream
-                    = new BufferedOutputStream(new FileOutputStream(to))) {
+        try (BufferedInputStream bufferedInputStream
+                     = new BufferedInputStream(new FileInputStream(from));
+             BufferedOutputStream bufferedOutputStream
+                     = new BufferedOutputStream(new FileOutputStream(to))) {
             byte[] buffer = new byte[1024];
             int length;
             while ((length = bufferedInputStream.read(buffer)) > 0) {
                 bufferedOutputStream.write(buffer, 0, length);
             }
-        } catch (IOException exception){
+        } catch (IOException exception) {
             throw new IOException("Exception while copying the file");
         }
     }

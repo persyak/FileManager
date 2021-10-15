@@ -90,14 +90,12 @@ public class FileManager {
         if (!from.canRead()) {
             throw new AccessDeniedException("Please check " + from + " file, it can't be read");
         }
-        try (BufferedInputStream bufferedInputStream
-                     = new BufferedInputStream(new FileInputStream(from));
-             BufferedOutputStream bufferedOutputStream
-                     = new BufferedOutputStream(new FileOutputStream(to))) {
-            byte[] buffer = new byte[1024];
+        try (FileInputStream fileInputStream = new FileInputStream(from);
+        FileOutputStream fileOutputStream = new FileOutputStream(to)){
+            byte[] buffer = new byte[8192];
             int length;
-            while ((length = bufferedInputStream.read(buffer)) > 0) {
-                bufferedOutputStream.write(buffer, 0, length);
+            while ((length = fileInputStream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, length);
             }
         } catch (IOException exception) {
             throw new IOException("Exception while copying the file");

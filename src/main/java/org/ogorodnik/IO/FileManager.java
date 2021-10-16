@@ -6,16 +6,6 @@ import java.util.Arrays;
 
 public class FileManager {
 
-    private static String pathParser(String path) {
-        byte[] pathArray = path.getBytes();
-        for (int i=0; i< pathArray.length; i++) {
-            if ((char) pathArray[i] == '\\') {
-                pathArray[i] = (byte)'/';
-            }
-        }
-        return Arrays.toString(pathArray);
-    }
-
     public static int countFiles(String path) throws FileNotFoundException {
         File[] array = listDirectory(path);
         int filecount = 0;

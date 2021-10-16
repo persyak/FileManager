@@ -2,8 +2,19 @@ package org.ogorodnik.IO;
 
 import java.io.*;
 import java.nio.file.AccessDeniedException;
+import java.util.Arrays;
 
 public class FileManager {
+
+    private static String pathParser(String path) {
+        byte[] pathArray = path.getBytes();
+        for (int i=0; i< pathArray.length; i++) {
+            if ((char) pathArray[i] == '\\') {
+                pathArray[i] = (byte)'/';
+            }
+        }
+        return Arrays.toString(pathArray);
+    }
 
     public static int countFiles(String path) throws FileNotFoundException {
         File[] array = listDirectory(path);
@@ -91,14 +102,14 @@ public class FileManager {
             throw new AccessDeniedException("Please check " + from + " file, it can't be read");
         }
         try (FileInputStream fileInputStream = new FileInputStream(from);
-        FileOutputStream fileOutputStream = new FileOutputStream(to)){
+             FileOutputStream fileOutputStream = new FileOutputStream(to)) {
             byte[] buffer = new byte[8192];
             int length;
             while ((length = fileInputStream.read(buffer)) > 0) {
                 fileOutputStream.write(buffer, 0, length);
             }
         } catch (IOException exception) {
-            throw new IOException("Exception while copying the file");
+            throw new RuntimeException("Exception while copying the file", exception);
         }
     }
 

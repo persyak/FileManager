@@ -2,7 +2,6 @@ package org.ogorodnik.IO;
 
 import java.io.*;
 import java.nio.file.AccessDeniedException;
-import java.util.Arrays;
 
 public class FileManager {
 

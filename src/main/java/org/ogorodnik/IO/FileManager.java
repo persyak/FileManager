@@ -43,8 +43,10 @@ public class FileManager {
     }
 
     public static void copy(String from, String to) throws IOException {
-        File copyFrom = new File(from);
-        File copyTo = new File(to);
+        String pathFrom = new File(from).getPath();
+        String pathTo = new File(to).getPath();
+        File copyFrom = new File(pathFrom);
+        File copyTo = new File(pathTo);
         checkIfFileOrDirectoryExists(copyFrom);
         if (copyFrom.isFile()) {
             copyFileToDirectory(from, to);
@@ -55,7 +57,8 @@ public class FileManager {
 
     public static void move(String from, String to) throws IOException {
         copy(from, to);
-        File itemToDelete = new File(from);
+        String deleteFrom = new File(from).getPath();
+        File itemToDelete = new File(deleteFrom);
         delete(itemToDelete);
     }
 
@@ -76,8 +79,10 @@ public class FileManager {
     }
 
     private static void copyFileToDirectory(String from, String to) throws IOException {
-        File copyFrom = new File(from);
-        File copyTo = new File(to);
+        String pathFrom = new File(from).getPath();
+        String pathTo = new File(to).getPath();
+        File copyFrom = new File(pathFrom);
+        File copyTo = new File(pathTo);
         if (!copyTo.exists()) {
             copyTo.mkdirs();
         }
@@ -129,7 +134,8 @@ public class FileManager {
     }
 
     private static File[] listDirectory(String path) throws FileNotFoundException {
-        File directory = new File(path);
+        String pathName = new File(path).getPath();
+        File directory = new File(pathName);
         checkIfFileOrDirectoryExists(directory);
         checkifSourceIsDirectory(directory);
         return directory.listFiles();
